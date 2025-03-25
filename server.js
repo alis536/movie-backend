@@ -2,12 +2,16 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+require("dotenv").config(); // Подключаем .env
 
 const app = express();
 const server = http.createServer(app);
+const PORT = process.env.PORT || 4000; // Используем порт из .env или 4000
+const CLIENT_URL = process.env.CLIENT_URL || "https://movie-alixan.netlify.app/"; // Клиентский URL
+
 const io = new Server(server, {
   cors: {
-    origin: "http://172.20.10.3:3000",
+    origin: CLIENT_URL, // Теперь можно менять без редактирования кода
     methods: ["GET", "POST"]
   }
 });
@@ -61,6 +65,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(4000, () => {
-  console.log("Сервер запущен на порту 4000");
+server.listen(PORT, () => {
+  console.log(`Сервер запущен на порту ${PORT}`);
 });
