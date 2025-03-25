@@ -11,7 +11,7 @@ const CLIENT_URL = process.env.CLIENT_URL || "https://movie-alixan.netlify.app/"
 
 const io = new Server(server, {
   cors: {
-    origin: CLIENT_URL,
+    origin: "*", // Разрешаем всем (для теста)
     methods: ["GET", "POST"]
   }
 });
