@@ -2,16 +2,16 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-require("dotenv").config(); // Подключаем .env
+require("dotenv").config();
 
 const app = express();
 const server = http.createServer(app);
-const PORT = process.env.PORT || 4000; // Используем порт из .env или 4000
-const CLIENT_URL = process.env.CLIENT_URL || "https://movie-alixan.netlify.app/"; // Клиентский URL
+const PORT = process.env.PORT || 4000;
+const CLIENT_URL = process.env.CLIENT_URL || "https://movie-alixan.netlify.app/";
 
 const io = new Server(server, {
   cors: {
-    origin: CLIENT_URL, // Теперь можно менять без редактирования кода
+    origin: CLIENT_URL,
     methods: ["GET", "POST"]
   }
 });
@@ -44,12 +44,10 @@ io.on("connection", (socket) => {
     io.emit("receiveMessage", message);
   });
 
-  // Запуск фильма
   socket.on("startMovie", () => {
     io.emit("playMovie");
   });
 
-  // Остановка фильма
   socket.on("pauseMovie", () => {
     io.emit("pauseMovie");
   });
@@ -63,6 +61,10 @@ io.on("connection", (socket) => {
     }
     console.log("Пользователь отключился", socket.id);
   });
+});
+
+app.get("/", (req, res) => {
+  res.send("Backend is running...");
 });
 
 server.listen(PORT, () => {
